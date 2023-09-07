@@ -1,13 +1,13 @@
 // Commenting
 
-const data=require('../models/Data.json'); // this line is used to import the data from Data.json file
+const data=require('../models/Data.json'); // importing the data from Data.json file
 
-function getUsers(req,res){ // this function is used to send the data to the browser
-    const users=data; // this line is used to store the data from Data.json file in users variable
-    res.send({users}); // this line is used to send the data to the browser
+function getUsers(req,res){ // function that send the data to the browser
+    const users=data; // storing the data from Data.json file in users variable
+    res.send({users}); // sending the data to the browser
 }
 
-module.exports ={getUsers}; // this line is used to export the getUsers function to the index.js file
+module.exports ={getUsers}; // exporting the getUsers function to the index.js file
 
 
 
@@ -15,15 +15,15 @@ module.exports ={getUsers}; // this line is used to export the getUsers function
 
 // register controller
 
-exports.registerController = async(req, res) => {
+exports.registerController = async(req, res) => { // function that sends the data to the browser
     try {
-        const { name, email, password } = req.body;
-        const existingEmail = await data.findOne({ email });
+        const { name, email, password } = req.body; // storing the data from the body in the variables
+        const existingEmail = await data.findOne({ email }); // finding if the email exists in the model/database
         if (existingEmail) {
             return res.send("Error the email is already registered. Try to sign in")
         }
-        const user = await data.create({ name, email, password });
-        this.sendToken(user, 201, res);
+        const user = await data.create({ name, email, password }); // creating the new user in the database
+        this.sendToken(user, 201, res); // sending the token to the browser
     } catch(error){
         this.sendToken(error, 500)
     }
@@ -46,18 +46,18 @@ exports.registerController = async(req, res) => {
 
 
 // Login controller email, password.
-exports.LoginController = async(req, res) => {
+exports.LoginController = async(req, res) => { // function that sends the data to the browser
     try{
-        const { email, password} = req.body;
-        const CheckingEmail = await data.findOne({ email });
+        const { email, password} = req.body; // storing the data from the body in the variables
+        const CheckingEmail = await data.findOne({ email }); // finding if the email exists in the model/database
             if(!CheckingEmail) {
                 return res.send("Error the email is not registered. Try to sign up",404)
             }
             
-            // i don't know the code for checking if the email and corresponding password matches or not for the login
+            // // i don't know the code for checking if the email and corresponding password matches or not for the login
             
             // have to check if the email and password matches or not 
-            const CheckingPassword = await data.matchpassword({ password });
+            const CheckingPassword = await data.matchpassword({ password }); // .then is used to check if the password exits in the model/database or not
 
             if(CheckingPassword) {
                 return res.send("Login Successful",201)
@@ -80,17 +80,17 @@ exports.LoginController = async(req, res) => {
 
 // register controller
 
-exports.registerController = (req, res) => { // this function is used to send the data to the browser
-    const {username, email, password} = req.body; // this line is used to store the data from Data.json file in users variable
+exports.registerController = (req, res) => { // function that sends the data to the browser
+    const {username, email, password} = req.body; // storing the data from the body in the variables
 
-    data.findOne({email}) // this line is used to find the email in the database
-    .then(existingEmail=> { // this line is used to check if the email is already present in the database or not
+    data.findOne({email}) // finding if the email exists in the model/database
+    .then(existingEmail=> {
         if(existingEmail) {
             return res.send("Error in email id is already present");
         }
-        return data.create({username, email, password}) // this line is used to create the new user in the database
+        return data.create({username, email, password}) // creating the new user in the database
     })
-    .then(user => {
+    .then(user => { // sending the token to the browser
         this.sendToken(user, 201, res);
     })
     .catch(error => {
@@ -106,10 +106,10 @@ exports.registerController = (req, res) => { // this function is used to send th
 
 //login controller interms of email and password.
 
-exports.LoginController = (req, res) => {
-    const {email, password} = req.body;
+exports.LoginController = (req, res) => { // function that sends the data to the browser
+    const {email, password} = req.body; // storing the data from the body in the variables
 
-    data.findOne({email}) // this line is used to find the email in the database
+    data.findOne({email}) // finding if the email exists in the database(model)
     .then(existingEmail => {
         if(!existingEmail){
             return res.send("Error !, Email unavailable, Try to sign up", 404);
@@ -119,7 +119,7 @@ exports.LoginController = (req, res) => {
         }
     })
 
-    .then(existingPassword => { // this line is used to check if the password is correct or not
+    .then(existingPassword => { // .then is used to check if the password exits in the model or not
         if(!existingPassword){
             return res.send("Error !, Password incorrect, Try again", 404);
         }
@@ -128,7 +128,7 @@ exports.LoginController = (req, res) => {
         }
     })
 
-    .catch(error => { // this line is used to send the error message to the browser
+    .catch(error => {
         res.sendToken(error, 500)
     });
     
@@ -142,10 +142,10 @@ exports.LoginController = (req, res) => {
 
 //  create controller for forms which consists of name(> 2), roll number, branch, specialization.
 
-exports.formController = (req,res) => { // this function is used to send the data to the browser
+exports.formController = (req,res) => { // function to send the data to the browser
     try {
         
-        const {username, roll_number, branch, specialization} = req.body; // this line is used to store the data from Data.json file in users variable
+        const {username, roll_number, branch, specialization} = req.body; // storing the data from the body in the variables
         
         if(username.length < 2){
             return res.send("Error, Name should be greater than 2 characters")  
@@ -159,7 +159,7 @@ exports.formController = (req,res) => { // this function is used to send the dat
             return res.send("Error, Branch should be less than 6 characters")  
         }
 
-        data.create({username, roll_number, branch, specialization}) // this line is used to create data in the database
+        data.create({username, roll_number, branch, specialization}) // creating data in the database
 
     } catch(error) {
         this.sendToken(error, 500)
@@ -171,13 +171,14 @@ exports.formController = (req,res) => { // this function is used to send the dat
 
 
 
-// Name, description, price.
+// profile info: Name, description, price.
 
-exports.profileController = (req, res) => { // this function is used to send the data to the browser
+exports.profileController = (req, res) => { // function used to send the data to the browser
 
     try {
-    const {name, description, price} = req.body; // this line is used to store the data from Data.json file in users variable
+    const {name, description, price} = req.body; // storing the data from the body in the variables
 
+    // Checking the criteria conditions for the name, description, price.
     if(name.length > 2) {
         return res.send("Error, Name should be greater than 2 characters")  
     }
@@ -190,9 +191,9 @@ exports.profileController = (req, res) => { // this function is used to send the
         return res.send("Error, Price should be greater than 0")
     }
 
-    data.create({name, description, price}) // this line is used to create data in the database
+    data.create({name, description, price}); // creating data in the database/model
     
     } catch(error) {
-        this.sendToken(error, 500)
+        this.sendToken(error, 500);
     }
 }
