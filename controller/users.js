@@ -182,7 +182,7 @@ exports.profileController = (req, res) => { // this function is used to send the
         return res.send("Error, Name should be greater than 2 characters")  
     }
 
-    if(description.length > 500) {
+    if(description.length > 300 && description.length < 500) {
         return res.send("Error, Description should be less than 500 characters")
     }
 
