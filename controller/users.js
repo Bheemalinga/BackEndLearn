@@ -183,7 +183,7 @@ exports.profileController = (req, res) => { // this function is used to send the
     }
 
     if(description.length > 300 && description.length < 500) {
-        return res.send("Error, Description should be less than 500 characters")
+        return res.send("Error, Description should be less than 500 characters and greater than 300 characters")
     }
 
     if(price <= 0) {
