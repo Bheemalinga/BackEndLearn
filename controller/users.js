@@ -9,6 +9,12 @@ const data=require('../models/Data.json'); // this line is used to import the da
 
 // module.exports ={getUsers}; // this line is used to export the getUsers function to the index.js file
 
+
+
+
+
+// register controller
+
 exports.registerController = async(req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -23,12 +29,23 @@ exports.registerController = async(req, res) => {
     }
 }
 
+
+
+
+
+
+
 // 201 success
 // 404 for not found error
 // 500 for internal server error
 
 
-// Login controller email, password ?
+
+
+
+
+
+// Login controller email, password.
 exports.LoginController = async(req, res) => {
     try{
         const { email, password} = req.body;
@@ -48,12 +65,17 @@ exports.LoginController = async(req, res) => {
             }
 
             //
-
     }
     catch(error){
         this.sendToken(error, 500)
     }
 }
+
+
+
+
+
+
 
 
 // register controller
@@ -75,6 +97,8 @@ exports.registerController = (req, res) => { // this function is used to send th
         res.sendToken(error, 500)
     });
 }
+
+
 
 
 
@@ -108,4 +132,49 @@ exports.LoginController = (req, res) => {
         res.sendToken(error, 500)
     });
     
+}
+
+
+
+
+
+
+
+//  create controller for forms which consists of name(> 2), roll number, branch, specialization.
+
+exports.formController = (req,res) => { // this function is used to send the data to the browser
+    try {
+        
+        const {username, roll_number, branch, specialization} = req.body; // this line is used to store the data from Data.json file in users variable
+        
+        if(username.length < 2){
+            return res.send("Error, Name should be greater than 2 characters")  
+        }
+
+        if(roll_number.length < 5){
+            return res.send("Error, Roll number should be greater than 5 numbers")  
+        }
+
+        if(branch.length > 6){
+            return res.send("Error, Branch should be less than 6 characters")  
+        }
+
+        data.create({username, roll_number, branch, specialization}) // this line is used to create data in the database
+
+    } catch(error) {
+        this.sendToken(error, 500)
+    }
+}
+
+
+
+
+
+
+// Name, description, price.
+
+exports.profileController = (req) => { // this function is used to send the data to the browser
+    const {name, description, price} = req.body; // this line is used to store the data from Data.json file in users variable
+
+    data.create({name, description, price}) // this line is used to create data in the database
 }
