@@ -2,12 +2,12 @@
 
 const data=require('../models/Data.json'); // this line is used to import the data from Data.json file
 
-// function getUsers(req,res){ // this function is used to send the data to the browser
-//     const users=data; // this line is used to store the data from Data.json file in users variable
-//     res.send({users}); // this line is used to send the data to the browser
-// }
+function getUsers(req,res){ // this function is used to send the data to the browser
+    const users=data; // this line is used to store the data from Data.json file in users variable
+    res.send({users}); // this line is used to send the data to the browser
+}
 
-// module.exports ={getUsers}; // this line is used to export the getUsers function to the index.js file
+module.exports ={getUsers}; // this line is used to export the getUsers function to the index.js file
 
 
 
@@ -173,8 +173,26 @@ exports.formController = (req,res) => { // this function is used to send the dat
 
 // Name, description, price.
 
-exports.profileController = (req) => { // this function is used to send the data to the browser
+exports.profileController = (req, res) => { // this function is used to send the data to the browser
+
+    try {
     const {name, description, price} = req.body; // this line is used to store the data from Data.json file in users variable
 
+    if(name.length > 2) {
+        return res.send("Error, Name should be greater than 2 characters")  
+    }
+
+    if(description.length > 500) {
+        return res.send("Error, Description should be less than 500 characters")
+    }
+
+    if(price <= 0) {
+        return res.send("Error, Price should be greater than 0")
+    }
+
     data.create({name, description, price}) // this line is used to create data in the database
+    
+    } catch(error) {
+        this.sendToken(error, 500)
+    }
 }
